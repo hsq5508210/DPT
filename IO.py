@@ -1,10 +1,10 @@
 import DPT
 import csv 
 import numpy as np 
-
+import pandas as pd 
 def readData(path, fileType = 'csv'):
     if fileType == "csv":
-        csvfile = np.loadtxt(path,  dtype=np.str, delimiter=",")
+        csvfile = pd.read_csv(path)
         data = csvfile
     if fileType == "bin":
         data = np.fromfile(path)
