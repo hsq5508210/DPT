@@ -19,7 +19,6 @@ def readData(path, fileType = 'csv'):
     t_e = str(time.time() - t_s) 
     print("spend " + t_e +'s')
     print("shape is:", data.shape)
-    print("see data:\n", data)
     return data
     #save the npmat type data 
 def writeData(path, data, fileName, fileType = 'bin'):
@@ -36,3 +35,4 @@ def writeData(path, data, fileName, fileType = 'bin'):
     print("Done")
     t_e = str(time.time() - t_s)
     print("spend " + t_e +'s')
+    del data 
