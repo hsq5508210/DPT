@@ -13,9 +13,13 @@ def readData(path, fileType = 'csv'):
         data = np.fromfile(path)
     if fileType == "npy":
         data = np.load(path)
+    if fileType == "h5":
+        data = pd.read_hdf(path, key = 'data') 
     print("Done")
     t_e = str(time.time() - t_s) 
     print("spend " + t_e +'s')
+    print("shape is:", data.shape)
+    print("see data:\n", data)
     return data
     #save the npmat type data 
 def writeData(path, data, fileName, fileType = 'bin'):
@@ -25,6 +29,10 @@ def writeData(path, data, fileName, fileType = 'bin'):
         data.tofile(path)
     if fileType == "npy":
         np.save(path, data)
+    if fileType == "h5":
+       h5 = pd.HDFStore(path, 'w')
+       h5['data'] = data 
+       h5.close()
     print("Done")
     t_e = str(time.time() - t_s)
     print("spend " + t_e +'s')
