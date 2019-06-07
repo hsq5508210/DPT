@@ -22,6 +22,7 @@ def readData(path, fileType = 'csv'):
     return data
     #save the npmat type data 
 def writeData(path, data, fileName, fileType = 'bin'):
+    print("writing...")
     t_s = time.time()
     path = path+fileName+'.'+fileType 
     if fileType == 'bin':
