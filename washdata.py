@@ -1,21 +1,21 @@
 import IO 
 
-path1 = "/Users/sqh/Projects/2019_520_compete/5_20_data/test_data/train_demo.csv"
-path2 = "/Users/sqh/Projects/2019_520_compete/5_20_data/test_data/userInfo_demo.csv"
-path3 = "/Users/sqh/Projects/2019_520_compete/5_20_data/test_data/adInfo_demo.csv"
-path4 = "/Users/sqh/Projects/2019_520_compete/5_20_data/test_data/contentInfo_demo.csv"
-traindata = IO.readData(path1, "csv")
+path1 = "/data2/lt/ctr/train/trainSet.npy"
+path2 = "/data2/lt/ctr/train/user_info.npy"
+path3 = "/data2/lt/ctr/train/ad_info.npy"
+path4 = "/data2/lt/ctr/train/content_info.npy"
+traindata = IO.readData(path1, "npy")
 print(traindata.shape)
 print(traindata)
-userinfo = IO.readData(path2, "csv")
+userinfo = IO.readData(path2, "npy")
 print(userinfo.shape)
 print(userinfo)
-adinfo = IO.readData(path3, "csv")
+adinfo = IO.readData(path3, "npy")
 print(adinfo.shape)
 print(adinfo)
-content = IO.readData(path4, "csv")
+content = IO.readData(path4, "npy")
 print(content.shape)
 print(content)
 
-userId = traindata.iloc[:,1:2]
-print("user id is:\n",userId)
+userId = pd.DataFrame(traindata).iloc[:,1:2]
+print("user id is:\n", userId)
