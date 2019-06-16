@@ -1,4 +1,4 @@
-import DataProcessTool.IO 
+import IO
 import os 
 
 def file_name(path):
