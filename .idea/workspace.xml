@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="215bee4d-2439-4654-8bc5-2821b0963f70" name="Default Changelist" comment="changed import moudle.">
-      <change beforePath="$PROJECT_DIR$/washdata.py" beforeDir="false" afterPath="$PROJECT_DIR$/washdata.py" afterDir="false" />
-    </list>
+    <list default="true" id="215bee4d-2439-4654-8bc5-2821b0963f70" name="Default Changelist" comment="changed import moudle." />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +200,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="31" width="1446" height="717" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25158563" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
