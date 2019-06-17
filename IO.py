@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd 
 import time 
 def readData(path, fileType = 'csv'):
-    print("reading...")
+    print("reading...\n")
     t_s = time.time()
     if fileType == "csv":
         csvfile = pd.read_csv(path)
@@ -14,7 +14,7 @@ def readData(path, fileType = 'csv'):
         data = np.load(path)
     if fileType == "h5":
         data = pd.read_hdf(path, key = 'data') 
-    print("Done")
+    print("Done\n")
     t_e = str(time.time() - t_s) 
     print("spend " + t_e +'s')
     print("shape is:", data.shape)
