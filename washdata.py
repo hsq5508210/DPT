@@ -10,7 +10,7 @@ import time
 print("Reading all the data.....")
 path1 = "/data2/lt/ctr/train/trainSet.npy"
 path2 = "/data2/lt/ctr/train/user_info.npy"
-path3 = "/data2/lt/ctr/train/ad_info.npy"
+path3 = "/data2/lt/ctr/train/adInfo_1.npy"
 path4 = "/data2/lt/ctr/train/content_info.npy"
 
 # 17 dimensions.
@@ -30,47 +30,61 @@ def importData(path, columns, type = 'npy'):
     data.columns = columns
     return data
 #=====================================
+# Index the "NULL" data and mark the hash map.
+def filterOfNan(matrix):
+    # Matrix is pandas dataframe format!!!.
+    matrixNan = matrix[matrix.isnull().values == True]
+    # Generate hash column.
+    matrixNan['hash'] = 0
+    matrixNan = np.array(matrixNan)
+    m = matrixNan.shape[0]
+    print(matrixNan.shape)
+    n = matrixNan.shape[1]
+    o = 1
+    for i in tqdm(range(m)):
+        cnt = 0
+        for j in range(o, n-1):
+            if type(matrixNan[i][j]) == 'str':
+                continue
+            if np.isnan(matrixNan[i][j]) == True:
+                cnt += 1
+        if cnt >= 2:
+            matrixNan[i][n-1] = 1
+    return matrixNan
+#===========================================
 # Import the data.
 # data[0] -> traindata
 # data[1] -> userInfo
 # data[2] -> adInfo
 # data[3] -> content
-data = []
-# for i in range(4):
-#     data.append(importData(path[i], columns[i]))
-#
-# traindata = data[0]
-# userInfo = data[1]
-# adInfo = data[2]
-# content = data[3]
-userInfo = importData(path[1], columns[1])
+data = [1, 2 , 3, 4]
+for i in range(4):
+    if i == 0: continue
+    data[i] = (importData(path[i], columns[i]))
 print("Already read all the data!")
+#    print(data[i])
+for i in range(4):
+    if i == 0 or i == 3: continue
+    data[i] = (filterOfNan(data[i]))
 
-# generate a hash map table from "userId"
-userId = pd.DataFrame(userInfo.iloc[:, 0:1])
-print("Generating the userId-hash..... ")
-userId["hash"] = 0
-userInfo["hash"] = 0
-print("Generate userId-hash complete!")
+traindata = data[0]
+userInfo = data[1]
+adInfo = data[2]
+content = data[3]
+
+IO.writeData('/data2/lt/ctr/MarkedData/', pd.DataFrame(userInfo), 'userInfo', 'h5')
+IO.writeData('/data2/lt/ctr/MarkedData/', pd.DataFrame(adInfo), 'adInfo', 'h5')
+
+
+
 #===========================================
 
-# Index the "NULL" data and mark the hash map.
-usrIfoNan = userInfo[userInfo.isnull().values == True]
-m = usrIfoNan.shape[0]
-usrIfoNan = np.array(usrIfoNan)
-usrHash = np.array(userId)
-#print(usrHash)
-print(usrIfoNan.shape)
-for i in tqdm(range(m)):
-# for i in range(m):
-    for j in range(1, 7):
-        #print(usrIfoNan[i][j])
-        if np.isnan(usrIfoNan[i][j]) == True:
-            usrIfoNan[i][7] += 1
-print(usrIfoNan)
 
-# Stage the usrIfoNan.
-IO.writeData('/data2/lt/ctr/train/', np.array(usrIfoNan), 'userIdHash', 'npy')
+
+#===========================================
+
+
+
 
 
 

@@ -29,9 +29,11 @@ def writeData(path, data, fileName, fileType = 'bin'):
     if fileType == "npy":
         np.save(path, data)
     if fileType == "h5":
-       h5 = pd.HDFStore(path, 'w')
-       h5['data'] = data 
-       h5.close()
+        h5 = pd.HDFStore(path, 'w')
+        h5['data'] = data
+        h5.close()
+    if fileType == 'csv':
+        data.to_csv(path)
     print("Done")
     t_e = str(time.time() - t_s)
     print("spend " + t_e +'s')
