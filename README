@@ -1,0 +1,15 @@
+使用IO.py读取/输出文件：
+    #读取文件	
+	import IO
+	# 支持csv,h5（返回的是pandas的DataFrame格式）
+	# 支持npy,bin（返回np.array格式)
+	a = IO.readdata(path, format = '...')	
+    # 输出（写入）文件
+	import IO
+	# 支持bin,npy（要求data为np.array)
+	# 支持csv（要求data为pandas的DataFrame）
+	# 最好存为npy格式
+	IO.writeData(path, data, name = "...", fileType = 'npy')
+所有文件都已经被存在了/data2/lt/ctr/train/npy/中
+可以用上述方法读取文件
+只要将content_info.npy中的数据从'str'编码成‘int'或者’float'就可以了

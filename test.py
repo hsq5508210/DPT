@@ -2,23 +2,23 @@ import IO
 import fileOp
 
 
-path1 = "/Users/sqh/Projects/2019_520_compete/5_20_data/test_data/train_demo.csv"
-path2 = "/Users/sqh/Projects/2019_520_compete/5_20_data/test_data/userInfo_demo.csv"
-path3 = "/Users/sqh/Projects/2019_520_compete/5_20_data/test_data/adInfo_demo.csv"
-path4 = "/Users/sqh/Projects/2019_520_compete/5_20_data/test_data/contentInfo_demo.csv"
+path1 = "/data2/lt/ctr/train/csv/train_20190518.csv"
+path2 = "/data2/lt/ctr/train/csv/user_info.csv"
+path3 = "/data2/lt/ctr/train/csv/ad_info.csv"
+path4 = "/data2/lt/ctr/train/csv/content_info.csv"
+path = "/data2/lt/ctr/train/h5/"
 traindata = IO.readData(path1, "csv")
-print(traindata.shape)
-print(traindata)
+IO.writeData(path, traindata, 'trainSet', 'h5')
+del traindata
 userinfo = IO.readData(path2, "csv")
-print(userinfo.shape)
-print(userinfo)
+IO.writeData(path, userinfo, 'userInfo', 'h5')
+del userinfo
 adinfo = IO.readData(path3, "csv")
-print(adinfo.shape)
-print(adinfo)
+IO.writeData(path, adinfo, 'adInfo', 'h5')
+del adinfo
 content = IO.readData(path4, "csv")
-print(content.shape)
-print(content)
+IO.writeData(path, content, 'contentInfo', 'h5')
+del content
+exit()
 
-userId = traindata.iloc[:,1:2]
-print("user id is:\n",userId)
 

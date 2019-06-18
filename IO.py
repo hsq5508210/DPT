@@ -1,8 +1,13 @@
 import csv
 import numpy as np 
 import pandas as pd 
-import time 
+import time
+#===================================================
+# Read data from different formats.
 def readData(path, fileType = 'csv'):
+    # readData("your file path", "your format")
+
+
     print("reading...\n")
     t_s = time.time()
     if fileType == "csv":
@@ -19,8 +24,12 @@ def readData(path, fileType = 'csv'):
     print("spend " + t_e +'s')
     print("shape is:", data.shape)
     return data
-    #save the npmat type data 
-def writeData(path, data, fileName, fileType = 'bin'):
+#=====================================================
+# Save the npmat type data.
+def writeData(path, data, fileName, fileType = 'npy'):
+    # data必须是np.array格式
+    # 最好存储为npy格式
+    # writeData("/data2/lt/ctr/", numpy_data, "newdata", 'npy')
     print("writing...")
     t_s = time.time()
     path = path+fileName+'.'+fileType 
