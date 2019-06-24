@@ -1,24 +1,42 @@
 import IO 
 import fileOp
+import washData as wd
+import  numpy as np
+import pandas as pd
+# np.set_printoptions(threshold='nan')
 
+# path1 = "/data2/lt/ctr/train/npy/trainSet.npy"
+path2 = "/data2/lt/ctr/train/npy/user_info.npy"
+path3 = "/data2/lt/ctr/train/npy/ad_info.npy"
+path4 = "/data2/lt/ctr/train/npy/newContent_info.npy"
+usrinfo = IO.readData(path2, 'npy')
+adinfo = IO.readData(path3, 'npy')
+usrinfo = pd.DataFrame(usrinfo)
+print(usrinfo)
+print(adinfo)
+adinfo = pd.DataFrame(adinfo)
+usrinfo = wd.filterOfNan(usrinfo)
+adinfo = wd.filterOfNan(adinfo)
+print(usrinfo, '\n', adinfo)
+IO.writeData("/data2/lt/ctr/MarkedData/", usrinfo, "usrinfo_mark", 'npy')
+IO.writeData("/data2/lt/ctr/MarkedData/", adinfo, "adinfo_mark", 'npy')
 
-path1 = "/data2/lt/ctr/train/csv/train_20190518.csv"
-path2 = "/data2/lt/ctr/train/csv/user_info.csv"
-path3 = "/data2/lt/ctr/train/csv/ad_info.csv"
-path4 = "/data2/lt/ctr/train/csv/content_info.csv"
-path = "/data2/lt/ctr/train/h5/"
-traindata = IO.readData(path1, "csv")
-IO.writeData(path, traindata, 'trainSet', 'h5')
-del traindata
-userinfo = IO.readData(path2, "csv")
-IO.writeData(path, userinfo, 'userInfo', 'h5')
-del userinfo
-adinfo = IO.readData(path3, "csv")
-IO.writeData(path, adinfo, 'adInfo', 'h5')
-del adinfo
-content = IO.readData(path4, "csv")
-IO.writeData(path, content, 'contentInfo', 'h5')
-del content
+# path = "/data2/lt/ctr/train/csv/ad_info.csv"
+# traindata = IO.readData(path1, "npy")
+# userinfo = IO.readData(path2, "npy")
+# adinfo = IO.readData(path, "csv")
+# adinfo = wd.encodeTheClass(adinfo, 1)
+# IO.writeData("/data2/lt/ctr/train/npy/", adinfo, "ad_info", 'npy')
+# print(adinfo)
+# content = IO.readData(path4, "npy")
+# print(traindata)
+# print(userinfo)
+# print(content)
 exit()
+
+
+
+
+
 
 

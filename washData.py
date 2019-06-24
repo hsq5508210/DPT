@@ -34,4 +34,25 @@ def filterOfNan(matrix):
         if cnt >= 2:
             matrixNan[i][n-1] = 1
     return matrixNan
-#===========================================
+#=========================================
+# Statics the class of the data
+def encodeTheClass(data, col):
+    # 'data' is numpy array format
+    # 'col' is index of the column you choose
+    data = np.array(data)
+    column = data[:, col]
+    # print(column)
+    # deprive the same class
+    column = list(set(column))
+    m = data.shape[0]
+    n = len(column)
+    for i in range(m):
+        for j in range(n):
+            if data[i][col] == column[j]:
+                # encode
+                data[i][col] = j
+    print(data[:][col])
+    return data
+#========================================
+
+
