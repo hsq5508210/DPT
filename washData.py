@@ -33,6 +33,7 @@ def filterOfNan(matrix):
                 cnt += 1
         if cnt >= 2:
             matrixNan[i][n-1] = 1
+    # Return the np.array
     return matrixNan
 #=========================================
 # Statics the class of the data
@@ -46,7 +47,7 @@ def encodeTheClass(data, col):
     column = list(set(column))
     m = data.shape[0]
     n = len(column)
-    for i in range(m):
+    for i in tqdm(range(m)):
         for j in range(n):
             if data[i][col] == column[j]:
                 # encode
@@ -54,5 +55,29 @@ def encodeTheClass(data, col):
     print(data[:][col])
     return data
 #========================================
-
-
+# Get the marked items.
+def getMarked(data):
+    data = np.array(data)
+    m = data.shape[0]
+    # Get the Hash column.
+    n = data.shape[1] - 1
+    marked = []
+    for i in tqdm(range(m)):
+        if data[i][n] == 1:
+            # Append the id of item.
+            marked.append(data[i][0])
+    # Return the pylist.
+    return marked
+#========================================
+# Delete the marked items.
+def delMarkedData(data, markedIndex, col):
+    data = np.array(data)
+    markedIndex = np.array(markedIndex)
+    m = data.shape[0]
+    n = markedIndex.shape[0]
+    for i in tqdm(range(m)):
+        for j in range(n):
+            if data[i][col] == markedIndex[j]:
+                np.delete(data, i, 0)
+    return data
+#========================================
