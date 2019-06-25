@@ -72,6 +72,7 @@ def getMarked(data):
 # Delete the marked items.
 def delMarkedData(data, markedIndex, col):
     data = np.array(data)
+    retData = []
     markedIndex = np.array(markedIndex)
     m = data.shape[0]
     n = markedIndex.shape[0]
