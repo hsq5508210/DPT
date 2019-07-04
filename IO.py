@@ -4,7 +4,7 @@ import pandas as pd
 import time
 #===================================================
 # Read data from different formats.
-def readData(path, fileType = 'csv'):
+def readData(path, fileType = 'npy'):
     # readData("your file path", "your format")
 
 

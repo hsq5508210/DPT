@@ -16,6 +16,7 @@ def importData(path, columns, type = 'npy'):
 # Index the "NULL" data and mark the hash map.
 def filterOfNan(matrix):
     # Matrix is pandas dataframe format!!!.
+    matrix = pd.DataFrame(matrix)
     matrixNan = matrix[matrix.isnull().values == True]
     # Generate hash column.
     matrixNan['hash'] = 0
@@ -66,8 +67,8 @@ def getMarked(data):
         if data[i][n] == 1:
             # Append the id of item.
             marked.append(data[i][0])
-    # Return the pylist.
-    return marked
+    # Return the np.array.
+    return np.array(marked)
 #========================================
 # Delete the marked items.
 def delMarkedData(data, markedIndex, col):
@@ -79,6 +80,7 @@ def delMarkedData(data, markedIndex, col):
     for i in tqdm(range(m)):
         for j in range(n):
             if data[i][col] == markedIndex[j]:
-                np.delete(data, i, 0)
+                # data[i][col] = 1
+                data = np.delete(data, i, 0)
     return data
 #========================================
