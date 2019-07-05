@@ -3,3 +3,6 @@
 *.out
 nohup.out
 cuda_test.py
+test2.py
+multiThread*
+__pycache__

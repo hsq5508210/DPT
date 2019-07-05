@@ -32,6 +32,7 @@ for i in range(28):
     # print(usrMarked[i])
     # t = executor.submit(process(path, trainDataName[0][1], usrMarked[i]))
     task.append(t)
+    # process(path, trainDataName[0][i], usrMarked[0])
 # for i in range(28):
 
 

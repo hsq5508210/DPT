@@ -72,15 +72,19 @@ def getMarked(data):
 #========================================
 # Delete the marked items.
 def delMarkedData(data, markedIndex, col):
+    print("Washing...")
     data = np.array(data)
-    retData = []
     markedIndex = np.array(markedIndex)
-    m = data.shape[0]
     n = markedIndex.shape[0]
-    for i in tqdm(range(m)):
+    m = data.shape[0]
+    print(n)
+    retdata = []
+    # for i in tqdm(range(data.shape[0])):
+    for i in range(m):
         for j in range(n):
-            if data[i][col] == markedIndex[j]:
-                # data[i][col] = 1
-                data = np.delete(data, i, 0)
-    return data
+            if data[i][col] != markedIndex[j]:
+                retdata.append(data[i])
+    # data = np.delete(data, i, 0)
+    retdata = np.array(retdata)
+    return retdata
 #========================================
