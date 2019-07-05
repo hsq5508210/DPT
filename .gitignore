@@ -6,3 +6,5 @@ cuda_test.py
 test2.py
 multiThread*
 __pycache__
+*test.py
+*Test.py

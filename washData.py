@@ -56,6 +56,23 @@ def encodeTheClass(data, col):
     print(data[:][col])
     return data
 #========================================
+# Transform the value class to discrete array.
+def val2DiscreteArr(dataCol):
+    # 'dataCol' is a np.array type column of the data.
+    # Static the max value of the data.
+    m = dataCol.shape[0]
+    n = 0
+    for i in range(m):
+        if dataCol[i][0] > n:
+            n = dataCol[i][0]
+    print("The max value is: ", n)
+    retdata = np.zeros([m, int(n)])
+    # Encode(mark) the dim.
+    for i in tqdm(range(m)):
+        if np.isnan(dataCol[i][0]) == False:
+            retdata[i][int(dataCol[i][0] - 1)] = 1
+    return retdata
+#========================================
 # Get the marked items.
 def getMarked(data):
     data = np.array(data)
