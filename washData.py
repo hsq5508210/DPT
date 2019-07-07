@@ -97,11 +97,19 @@ def delMarkedData(data, markedIndex, col):
     print(n)
     retdata = []
     # for i in tqdm(range(data.shape[0])):
-    for i in range(m):
+    for i in tqdm(range(m)):
+        # if i%1000 == 0: print(str(float(i/m)))
         for j in range(n):
-            if data[i][col] != markedIndex[j]:
-                retdata.append(data[i])
-    # data = np.delete(data, i, 0)
-    retdata = np.array(retdata)
+            if data[i][col] == markedIndex[j]:
+                # retdata.append(data[i])
+                # data[i][col] = 1
+                data = np.delete(data, i, 0)
+                i = i - 1
+                m -= 1
+                print(data.shape)
+    # for i in range(n):
+    #     if data[i][col] == 1:
+    #         data = np.delete(data, i, 0)
+    retdata = np.array(data)
     return retdata
 #========================================
