@@ -1,15 +1,22 @@
-# -*- coding:UTF-8 -*-
 import csv
 import numpy as np 
 import pandas as pd 
 import time
 #===================================================
 # Read data from different formats.
-def readData(path, fileType = 'npy'):
+def readData(path):
     # readData("your file path", "your format")
-
-
+    #
+    #
     print("reading...")
+    s = path
+    n = len(s)
+    # Get the format.
+    for i in range(n):
+        if s[i] == '.':
+            s = s[i + 1:]
+            break
+    fileType = s
     t_s = time.time()
     if fileType == "csv":
         csvfile = pd.read_csv(path)

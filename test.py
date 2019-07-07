@@ -5,31 +5,19 @@ import  numpy as np
 import pandas as pd
 # Print the detial of the data.
 # np.set_printoptions(threshold=np.inf)
+def process(path, name, markData, num):
+    data = IO.readData(path+str(name))
+    data = wd.delMarkedData(data, markData, 1)
+    IO.writeData("/data2/lt/ctr/train/2ndClean/", data, '2ndTrainCleand_' + str(num))
 
-path1 = "/data2/lt/ctr/train/npy/trainSet.npy"
-path2 = "/data2/lt/ctr/train/npy/user_info.npy"
-path3 = "/data2/lt/ctr/train/npy/ad_info.npy"
-path4 = "/data2/lt/ctr/train/npy/newContent_info.npy"
-pathmad = "/data2/lt/ctr/MarkedData/adinfo_mark.npy"
+path = "/data2/lt/ctr/train/cleaned/"
 pathmusr = "/data2/lt/ctr/MarkedData/usrinfo_mark.npy"
-
-# trainData = IO.readData(path1, 'npy')
-# pathwrite = "/data2/lt/ctr/train/batch/"
-# train = []
-# train = fileOp.splitData(path1, num = 56)
-# m = len(train)
-# for i in range(m):
-#     IO.writeData(pathwrite, train[i], "train_batch"+str(i), 'npy')
-#     print(train[i].shape)
-usrMarked = wd.getMarked(wd.filterOfNan(IO.readData(path2, 'npy')))
-print(len(usrMarked))
-# adMarked = IO.readData(pathmad, 'npy')
-# # print(adMarked)
-# adMarked = wd.getMarked(adMarked)
-# print(trainData)
-# data = wd.delMarkedData(trainData, usrMarked, 1)
-# print(len(usrMarked), '\n', len(adMarked))
-exit()
+usrMarked = wd.getMarked(IO.readData(pathmusr, 'npy'))
+usrMarked = np.reshape(usrMarked, [532648, 1])
+trainDataName = fileOp.file_name(path)
+usrMarked = fileOp.splitData(data = usrMarked, num = 256)
+for i in range(18):
+    process(path, trainDataName[0][i], usrMarked[1], i+1)
 
 
 

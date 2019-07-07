@@ -27,7 +27,7 @@ usrMarked = fileOp.splitData(data = usrMarked, num = 256)
 #=======================================================
 executor = ThreadPoolExecutor(max_workers = 28)
 task = []
-for i in range(28):
+for i in range(9, 12):
     t = executor.submit(process(path, trainDataName[0][i], usrMarked[0]))
     # print(usrMarked[i])
     # t = executor.submit(process(path, trainDataName[0][1], usrMarked[i]))

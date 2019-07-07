@@ -1,4 +1,5 @@
 import IO
+import math
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -80,6 +81,7 @@ def getMarked(data):
     # Get the Hash column.
     n = data.shape[1] - 1
     marked = []
+    print("Getting mark...")
     for i in tqdm(range(m)):
         if data[i][n] == 1:
             # Append the id of item.
@@ -94,7 +96,7 @@ def delMarkedData(data, markedIndex, col):
     markedIndex = np.array(markedIndex)
     n = markedIndex.shape[0]
     m = data.shape[0]
-    print(n)
+    # print(n)
     retdata = []
     # for i in tqdm(range(data.shape[0])):
     for i in range(m):
@@ -103,5 +105,16 @@ def delMarkedData(data, markedIndex, col):
                 retdata.append(data[i])
     # data = np.delete(data, i, 0)
     retdata = np.array(retdata)
+    return retdata
+#========================================
+# Encode the time information.
+def processTime(timeCol, num):
+    retdata = timeCol
+    m, n = timeCol.shape
+    for i in range(m):
+        # time[i] = time[i][11:13]
+        s = str(timeCol[i])
+        timeCol[i] = math.ceil(int(s[13:15])/(24/num))
+    retdata = val2DiscreteArr(timeCol)
     return retdata
 #========================================

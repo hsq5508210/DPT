@@ -1,10 +1,12 @@
 *.pyc
 *.py.swp
+*.pyc
+*.py.swp
 *.out
 nohup.out
 cuda_test.py
 test2.py
 multiThread*
 __pycache__
-*test.py
-*Test.py
+*test*
+*Test*
