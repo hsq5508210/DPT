@@ -4,11 +4,19 @@ import pandas as pd
 import time
 #===================================================
 # Read data from different formats.
-def readData(path, fileType = 'csv'):
+def readData(path):
     # readData("your file path", "your format")
-
-
-    print("reading...\n")
+    #
+    #
+    print("reading...")
+    s = path
+    n = len(s)
+    # Get the format.
+    for i in range(n):
+        if s[i] == '.':
+            s = s[i + 1:]
+            break
+    fileType = s
     t_s = time.time()
     if fileType == "csv":
         csvfile = pd.read_csv(path)
@@ -19,8 +27,7 @@ def readData(path, fileType = 'csv'):
         data = np.load(path)
     if fileType == "h5":
         data = pd.read_hdf(path, key = 'data') 
-    print("Done\n")
-    t_e = str(time.time() - t_s) 
+    t_e = str(time.time() - t_s)
     print("spend " + t_e +'s')
     print("shape is:", data.shape)
     return data
