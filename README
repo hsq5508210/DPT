@@ -1,0 +1,72 @@
+使用IO.py读取/输出文件：
+	import IO
+	# readData()读取文件
+	    # 支持csv,h5（返回的是pandas的DataFrame格式）
+	    # 支持npy,bin（返回np.array格式)
+	    例如：
+	        a = IO.readdata(path)
+    # 输出（写入）文件
+	    # 支持bin,npy（要求data为np.array)
+	    # 支持csv（要求data为pandas的DataFrame）
+	    # 最好存为npy格式
+	    例如：
+	        IO.writeData(path, data, name = "...", fileType = 'npy')
+使用washData.py来清洗数据：
+    import washData as wd
+    # filterOfNan(): 过滤出数据中的'nan',若某条数据中出现过两次以上（包括两次），就进行标记（在最后一个维度标记为'1'）。
+        例如：
+            d = wd.filterOfNan(data)
+            # 其中data为数据矩阵，其格式为pandas.DataFrame()
+    # encodeTheClass(): 将输入数据的某一列内类别编码成代数形式。
+        例如：
+            d = wd.encodeTheClass(data, col = 3)
+            # 其中data为numpy.array, col为你想编码的data中的某一列的列数
+            # col = 3 表示编码第四列
+            # 返回的为编码后的data矩阵
+    # val2DiscreteArr(): 将一列数据的代数形式转化为one-hot形式。
+        如：[1,2,3,4,5,6]
+            1->100000
+            2->010000
+            ...
+            6->000001
+        例如：
+            d = val2DiscreteArr(colData)
+            # 其中colData为一列代数数据
+            # 返回值为one-hot矩阵
+    # delMarkedData(): 根据索引删除数据中的某些条目
+        例如：
+            d = delMarkedData(data, markedIndex, col)
+            # 其中data为源数据
+            # markedIndex为一列索引数据
+            # col为索引在data查找的列号
+            # 返回值为处理完毕的data数据
+    # processTime(): 为处理时间值的数据，从时间信息中提取小时值，并将值落在24小时的某个区间内
+        例如：
+            d = processTime(timeCol, num = 6)
+            # 其中timeCol为包含时间信息的数组
+            # num为将24小时划分的区间的个数
+            # 返回值为处理好的时间数组
+使用fileOp.py来对文件夹或者数据进行操作：
+    # file_name(): 获取目录下所有文件的文件名
+        # 只支持一级目录
+        例如：
+            fileNames = file_name(path)
+            # path为一级目录
+            # 返回值为包含文件名的列表
+    # splitData(): 将数据等分为多个batch
+        例1：
+            batchs = splitData(data, num = 10)
+            # 以上是直接读取数据的方法
+            # data为numpy.array
+            # num为你将数据切分成的份数
+        例2：
+            batchs = splitData(path, num = 10)
+            # 以上为从硬盘读取数据的方法
+            # path为文件路径
+            # num同上
+            # 返回值为由一批切分好的数据所组成的列表
+
+
+
+
+
