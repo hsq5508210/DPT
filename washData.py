@@ -96,13 +96,30 @@ def delMarkedData(data, markedIndex, col):
     markedIndex = np.array(markedIndex)
     n = markedIndex.shape[0]
     dataCol = data[:, col:col+1]
-    index = []
+    val = []
     for i in tqdm(range(n)):
         if dataCol[dataCol == markedIndex[i]].size != 0:
-            index.append(np.argwhere(dataCol == dataCol[dataCol == markedIndex[i]])[0][0])
-    index = np.unique(np.array(index))
-    for i in range(index.shape[0]):
-         data = np.delete(data, index[i], 0)
+            val.append(dataCol[dataCol == markedIndex[i]])
+    # print(val)
+    # val = np.unique(np.array(val))
+    val = np.array(val)
+    v = []
+    val = np.array(val).reshape((-1, 1))
+    # print(val.shape, '\n', val)
+    for i in range(val.shape[0]):
+        if i == 0: v.append(val[0])
+        for j in range(len(v)):
+            if val[i] == v[j]:
+                break
+            if j == len(v)-1:
+                v.append(val[i])
+    val = np.array(v)
+    for i in range(val.shape[0]):
+        if i == val.shape[0]: break
+        # print(np.argwhere(data[:, 1] == val[i]))
+        index = np.unique(np.argwhere(data[:, 1] == val[i]))
+        print((index), ' ', data[index], val[i])
+        data = np.delete(data, index, 0)
     return data
 # def delMarkedData(data, markedIndex, col):
 #     print("Washing...")
