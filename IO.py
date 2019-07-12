@@ -30,7 +30,7 @@ def readData(path):
     t_e = str(time.time() - t_s)
     print("spend " + t_e +'s')
     print("shape is:", data.shape)
-    return data
+    return np.array(data)
 #=====================================================
 # Save the npmat type data.
 def writeData(path, data, fileName, fileType = 'npy'):
