@@ -19,7 +19,8 @@ def readData(path):
     fileType = s
     t_s = time.time()
     if fileType == "csv":
-        csvfile = pd.read_csv(path)
+        # csvfile = np.loadtxt(path, delimiter=",", dtype=np.str)
+        csvfile = pd.read_csv(path, header=None)
         data = csvfile
     if fileType == "bin":
         data = np.fromfile(path)
@@ -31,6 +32,7 @@ def readData(path):
     print("spend " + t_e +'s')
     print("shape is:", data.shape)
     return np.array(data)
+    # return data
 #=====================================================
 # Save the npmat type data.
 def writeData(path, data, fileName, fileType = 'npy'):

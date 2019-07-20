@@ -9,4 +9,5 @@ test2.py
 multiThread*
 __pycache__
 test*
+*.out
 *Test*

@@ -144,7 +144,7 @@ def delMarkedData(data, markedIndex, col):
 def processTime(timeCol, num = 6):
     retdata = timeCol
     m, n = timeCol.shape
-    for i in range(m):
+    for i in tqdm(range(m)):
         # time[i] = time[i][11:13]
         s = str(timeCol[i])
         timeCol[i] = math.ceil(int(s[13:15])/(24/num))
