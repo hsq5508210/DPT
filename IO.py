@@ -12,14 +12,15 @@ def readData(path):
     s = path
     n = len(s)
     # Get the format.
-    for i in range(n):
+    for i in range(n-1, 1, -1):
         if s[i] == '.':
             s = s[i + 1:]
             break
     fileType = s
     t_s = time.time()
     if fileType == "csv":
-        csvfile = pd.read_csv(path)
+        # csvfile = np.loadtxt(path, delimiter=",", dtype=np.str)
+        csvfile = pd.read_csv(path, header=None)
         data = csvfile
     if fileType == "bin":
         data = np.fromfile(path)
@@ -30,7 +31,8 @@ def readData(path):
     t_e = str(time.time() - t_s)
     print("spend " + t_e +'s')
     print("shape is:", data.shape)
-    return data
+    return np.array(data)
+    # return data
 #=====================================================
 # Save the npmat type data.
 def writeData(path, data, fileName, fileType = 'npy'):

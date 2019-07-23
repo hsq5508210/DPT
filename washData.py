@@ -8,7 +8,7 @@ import time
 
 #====================================
 #=====================================
-def importData(path, columns, type = 'npy'):
+def importData(path, columns):
     data = IO.readData(path, type)
     data = pd.DataFrame(data)
     data.columns = columns
@@ -95,23 +95,56 @@ def delMarkedData(data, markedIndex, col):
     data = np.array(data)
     markedIndex = np.array(markedIndex)
     n = markedIndex.shape[0]
-    m = data.shape[0]
-    # print(n)
-    retdata = []
-    # for i in tqdm(range(data.shape[0])):
-    for i in range(m):
-        for j in range(n):
-            if data[i][col] != markedIndex[j]:
-                retdata.append(data[i])
-    # data = np.delete(data, i, 0)
-    retdata = np.array(retdata)
-    return retdata
+    dataCol = data[:, col:col+1]
+    val = []
+    for i in tqdm(range(n)):
+        if dataCol[dataCol == markedIndex[i]].size != 0:
+            val.append(dataCol[dataCol == markedIndex[i]])
+    # print(val)
+    # val = np.unique(np.array(val))
+    val = np.array(val)
+    v = []
+    val = np.array(val).reshape((-1, 1))
+    # print(val.shape, '\n', val)
+    for i in range(val.shape[0]):
+        if i == 0: v.append(val[0])
+        for j in range(len(v)):
+            if val[i] == v[j]:
+                break
+            if j == len(v)-1:
+                v.append(val[i])
+    val = np.array(v)
+    for i in range(val.shape[0]):
+        if i == val.shape[0]: break
+        # print(np.argwhere(data[:, 1] == val[i]))
+        index = np.unique(np.argwhere(data[:, 1] == val[i]))
+        print((index), ' ', data[index], val[i])
+        data = np.delete(data, index, 0)
+    return data
+# def delMarkedData(data, markedIndex, col):
+#     print("Washing...")
+#     data = np.array(data)
+#     markedIndex = np.array(markedIndex)
+#     n = markedIndex.shape[0]
+#     m = data.shape[0]
+#     for i in tqdm(range(m)):
+#         # if i%1000 == 0: print(str(float(i/m)))
+#         if i == m: break
+#         for j in range(n):
+#             if data[i][col] == markedIndex[j]:
+#                 # retdata.append(data[i])
+#                 # data[i][col] = 1
+#                 data = np.delete(data, i, 0)
+#                 i = i - 1
+#                 m -= 1
+#     retdata = np.array(data)
+#     return retdata
 #========================================
 # Encode the time information.
-def processTime(timeCol, num):
+def processTime(timeCol, num = 6):
     retdata = timeCol
     m, n = timeCol.shape
-    for i in range(m):
+    for i in tqdm(range(m)):
         # time[i] = time[i][11:13]
         s = str(timeCol[i])
         timeCol[i] = math.ceil(int(s[13:15])/(24/num))

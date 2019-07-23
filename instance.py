@@ -26,7 +26,7 @@ path = [path1, path2, path3, path4]
 # data[1] -> userInfo
 # data[2] -> adInfo
 # data[3] -> content
-data = [1, 2 , 3, 4]
+data = [1, 2, 3, 4]
 for i in range(4):
     if i == 0: continue
     data[i] = (wd.importData(path[i], columns[i]))

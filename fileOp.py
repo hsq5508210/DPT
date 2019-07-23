@@ -10,13 +10,12 @@ def file_name(path):
     return list(f)
 #================================================
 # Split the dataSet
-def splitData(path = None, data = None, dataType = "npy", num = 10):
+def splitData(path = None, data = None, num = 10):
     if path != None:
-        data = IO.readData(path, dataType)
+        data = IO.readData(path)
         # Feed the np.array data.
         print("Spliting...")
-        if dataType != "npy":
-            data = np.array(data)
+        data = np.array(data)
     retdata = []
     sumLen = data.shape[0]
     print("shape is:", data.shape)
