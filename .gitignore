@@ -8,13 +8,6 @@ cuda_test.py
 test2.py
 multiThread*
 __pycache__
-<<<<<<< HEAD
-*test*
-*Test*
-test*
-test2*
-=======
 test*
 *.out
 *Test*
->>>>>>> lab
