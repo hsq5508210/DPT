@@ -3,13 +3,14 @@ import numpy as np
 
 class _NN:
 
-    def __init__(self, layer, activate):
+    def __init__(self, layer, input, activate):
         """
         list :param layer: list of neuron's number of each layer.
         str :param activate: type of the activate function.
         """
         self.layer = self.getLayers(layer)
         self.activate = activate
+        self.inputData = input
         self.output = 0
     def getLayers(self, layer):
         """
@@ -22,32 +23,46 @@ class _NN:
             L.append(_layer(layer[i], layer[i + 1]))
         return L
 
-    def getInput(self, inputData):
-        return inputData
+    def getInput(self):
+        return self.inputData
     @jit
     def feedForward(self, inputData):
+        """
+        execute the feed-forward propaganda at once.
+        :param inputData: first layer was feed input data.
+        :return:
+        """
         activate = self.activate
         everyLayers = self.layer
         W = []
+        B = []
         m = len(everyLayers)
-        input = self.getInput(inputData)
+        input = self.getInput()
         for layer in everyLayers:
             W.append(layer.W_mat)
+            B.append(layer.bias)
         x = 0
         for i in range(m):
             w = W[i]
-            if i == 0: x = input
-            x = self.act(self.runLayer(x, w))
+            bias = B[i]
+            if i == 0:
+                x = input
+            x = self.act(self.runLayer(w, x) + bias)
         return x
-    def runLayer(self, x, w):
-        return matmul(w, x).val
 
-    def act(self, x):
+    def runLayer(self, W, x):
+        return matmul(W, x).val
+
+    def act(self, x, ):
         m = x.shape[0]
         if self.activate == 'sigmoid':
             for i in range(m):
                 x[i] = sigmoid(x[i]).val
         return x
+
+    def train(self, learningRate):
+        """"""
+
 class _layer:
     def __init__(self, inputNum, outputNum):
         """
@@ -57,6 +72,7 @@ class _layer:
         self.outNodesNum = outputNum
         self.inNodesNum =  inputNum
         self.W_mat = np.random.rand(self.outNodesNum, self.inNodesNum)
+        self.bias = np.random.rand(self.outNodesNum, 1)
     def creatLayer(self):
         """
         generate the layer.
@@ -153,7 +169,8 @@ class matmul(mul):
     @cuda.jit
     def mul_G(self):
         """"""
-a = _NN([2, 4, 3], "sigmoid")
+
 x = np.random.rand(2,1)
+a = _NN([2, 4, 5, 4, 2], x, "sigmoid")
 print(a.feedForward(x))
 
