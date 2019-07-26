@@ -1,9 +1,9 @@
 from numba import cuda, jit, int64, int32, float32
 import numpy as np
-
+from sympy import *
 class _NN:
 
-    def __init__(self, layer, input, activate):
+    def __init__(self, layer, input, label, activate):
         """
         list :param layer: list of neuron's number of each layer.
         str :param activate: type of the activate function.
@@ -11,6 +11,7 @@ class _NN:
         self.layer = self.getLayers(layer)
         self.activate = activate
         self.inputData = input
+        self.label = label
         self.output = 0
     def getLayers(self, layer):
         """
@@ -53,12 +54,27 @@ class _NN:
     def runLayer(self, W, x):
         return matmul(W, x).val
 
-    def act(self, x, ):
+    def act(self, x):
+        """
+        :param x: input variable.
+        :return: activate function result.
+        """
         m = x.shape[0]
         if self.activate == 'sigmoid':
             for i in range(m):
                 x[i] = sigmoid(x[i]).val
         return x
+
+    def getGrad(self, index, delta):
+        """"""
+
+    def updateWeight(self):
+        """"""
+
+    def backPropaganda(self):
+        output = self.feedForward(inputData=self.inputData)
+        loss = 0.5 * ((self.label - output) ** 2)
+        delta = []
 
     def train(self, learningRate):
         """"""
