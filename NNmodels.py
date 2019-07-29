@@ -1,7 +1,9 @@
 from numba import cuda, jit, int64, int32, float32
 import numpy as np
+import getMINIST
+import fileOp
 from sympy import *
-
+# np.set_printoptions(threshold='nan')
 class _NN:
 
     def __init__(self, layer, input, label, activate, learningRate):
@@ -30,10 +32,9 @@ class _NN:
     def getInput(self):
         return self.inputData
     @jit
-    def feedForward(self, inputData):
+    def feedForward(self):
         """
         execute the feed-forward propaganda at once.
-        :param inputData: first layer was feed input data.
         :return:
         """
         activate = self.activate
@@ -108,7 +109,7 @@ class _NN:
         """
         execute the back propaganda procedure one time.
         """
-        output = self.feedForward(inputData=self.inputData)
+        output = self.feedForward()
         lossGrad = output - self.label
         self.loss = (0.5 * (lossGrad**2)).mean()
         everyLayers = self.layer
@@ -128,8 +129,21 @@ class _NN:
             grad_B = delta[-1]
             grad_W = delta[-1] * theLayer.outputVal
             self.updateWeight(i, grad_B, grad_W)
-    def train(self, learningRate):
+    @jit
+    def train(self, epoch):
         """"""
+        m = (self.inputData.shape[0])
+        x_train = self.inputData
+        y_train = self.label
+        for i in range(epoch):
+            if epoch % 10 == 0:
+                print(self.loss)
+            for j in range(m):
+                self.inputData = x_train[j]
+                self.label = y_train[j]
+                self.backPropaganda()
+
+
 
 class _layer:
     def __init__(self, inputNum, outputNum, layerIdx):
@@ -143,8 +157,8 @@ class _layer:
         self.inNodesNum = inputNum
         self.layerIdx = layerIdx
         self.outputVal = 0
-        self.W_mat = np.random.rand(self.outNodesNum, self.inNodesNum)
-        self.bias = np.random.rand(self.outNodesNum, 1)
+        self.W_mat = np.random.randn(self.outNodesNum, self.inNodesNum)
+        self.bias = np.random.randn(self.outNodesNum, 1)
         self.grad = []
 
     # def creatLayer(self):
@@ -273,16 +287,24 @@ class matmul(mul):
 
 x = np.array([[1],
               [2],
+              [1],
+              [1],
+              [0],
               [1]])
 y = np.array([[1],
+              [0],
               [0]])
 # for i in range(100):
 #     x.append(np.random.rand(2,1))
 #     y.append(np.random.randint(0, 1, (2, 1)))
-a = _NN([3, 4, 5, 4, 2], x, label=y, activate="sigmoid", learningRate=0.08)
-for i in range(100000):
-    if i%100 == 0:
-        print(a.loss)
-    a.backPropaganda()
+inputdata = getMINIST.load_train_images().reshape((60000, 784, -1))
+label = getMINIST.load_train_labels()
+print(inputdata.shape)
+print(label.shape)
+a = _NN([784, 512, 512, 128, 10], inputdata, label=label, activate="sigmoid", learningRate=0.001)
+a.train(1000)
+
+
+
 
 
