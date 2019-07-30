@@ -1,9 +1,12 @@
 from numba import cuda, jit, int64, int32, float32
 import numpy as np
 import getMINIST
+from time import time
+from tqdm import tqdm
 import fileOp
+import math
 from sympy import *
-# np.set_printoptions(threshold='nan')
+np.set_printoptions(threshold=np.inf)
 class _NN:
 
     def __init__(self, layer, input, label, activate, learningRate):
@@ -17,6 +20,7 @@ class _NN:
         self.inputData = input
         self.label = label
         self.loss = 0
+        self.lossGrad = 0.0
         self.output = 0
     def getLayers(self, layer):
         """
@@ -31,7 +35,7 @@ class _NN:
 
     def getInput(self):
         return self.inputData
-    @jit
+    # @jit
     def feedForward(self):
         """
         execute the feed-forward propaganda at once.
@@ -57,6 +61,7 @@ class _NN:
                 x = input
             x = self.act(self.runLayer(w, x) + bias)
             self.layer[i].outputVal = x
+        # print(x)
         return x
 
     def runLayer(self, W, x):
@@ -103,25 +108,22 @@ class _NN:
 
     def getDelta(self, layerIndex, outputLayerMark):
         """"""
-
+    def getLoss(self):
+        output = self.feedForward()
+        self.lossGrad += output - self.label
+        self.loss += (0.5 * (output - self.label)**2).mean()
     @jit
     def backPropaganda(self):
         """
         execute the back propaganda procedure one time.
         """
-        output = self.feedForward()
-        lossGrad = output - self.label
-        self.loss = (0.5 * (lossGrad**2)).mean()
-        everyLayers = self.layer
         delta = []
-        outputs = []
+        everyLayers = self.layer
         for i in range(len(everyLayers) - 1, -1, -1):
             output = everyLayers[i].outputVal
             theLayer = everyLayers[i]
-
-            nextLayer = everyLayers[i - 1]
             if i == len(everyLayers) - 1:
-                delta.append(lossGrad * output * (1 - output))
+                delta.append(self.lossGrad * output * (1 - output))
                 continue
             else:
                 lastLayer = everyLayers[i + 1]
@@ -129,19 +131,32 @@ class _NN:
             grad_B = delta[-1]
             grad_W = delta[-1] * theLayer.outputVal
             self.updateWeight(i, grad_B, grad_W)
-    @jit
-    def train(self, epoch):
+    # @jit
+    def resetLoss(self):
+        self.loss = 0.0
+        self.lossGrad = 0.0
+
+    # @jit
+    def train(self, epoch=1000, batchSize=128):
         """"""
-        m = (self.inputData.shape[0])
-        x_train = self.inputData
-        y_train = self.label
-        for i in range(epoch):
-            if epoch % 10 == 0:
-                print(self.loss)
-            for j in range(m):
-                self.inputData = x_train[j]
-                self.label = y_train[j]
+        batchNum = math.ceil(self.inputData.shape[0]/batchSize)
+        batches_x = fileOp.splitData(data=self.inputData, num=batchNum)
+        batches_y = fileOp.splitData(data=self.label, num=batchNum)
+        print(batchNum)
+        print(batches_x[0].shape[0])
+        for i in (range(epoch)):
+            print('epoch ', i, 'loss is: ', self.loss)
+            # if i % 10 == 0:
+                # print('epoch ', i, 'loss is: ', self.loss)
+            for j in range(batchNum):
+                # print('epoch ', i, 'loss is: ', self.loss)
+                self.resetLoss()
+                for k in range(batches_x[j].shape[0]):
+                    self.inputData = batches_x[j][k]
+                    self.label = batches_y[j][k]
+                    self.getLoss()
                 self.backPropaganda()
+
 
 
 
@@ -157,8 +172,8 @@ class _layer:
         self.inNodesNum = inputNum
         self.layerIdx = layerIdx
         self.outputVal = 0
-        self.W_mat = np.random.randn(self.outNodesNum, self.inNodesNum)
-        self.bias = np.random.randn(self.outNodesNum, 1)
+        self.W_mat = np.random.uniform(-1, 1, (self.outNodesNum, self.inNodesNum))
+        self.bias = np.random.uniform(-1, 1, (self.outNodesNum, 1))
         self.grad = []
 
     # def creatLayer(self):
@@ -251,7 +266,11 @@ class sigmoid(activate):
 
         :return: sigmoid function result from cpu.
         """
-        return float32(1 / (1 + np.exp(-self.x)))
+        if self.x >= 0:
+
+            return (1 / (1 + np.exp(-self.x)))
+        else:
+            return np.exp(self.x)/(1+np.exp(self.x))
     @cuda.jit
     def gpu_f(self):
         """
@@ -297,12 +316,17 @@ y = np.array([[1],
 # for i in range(100):
 #     x.append(np.random.rand(2,1))
 #     y.append(np.random.randint(0, 1, (2, 1)))
-inputdata = getMINIST.load_train_images().reshape((60000, 784, -1))
-label = getMINIST.load_train_labels()
+inputdata = ((getMINIST.load_train_images().reshape((60000, 784, -1))) / 255.0)[0:10000]
+print(inputdata[1])
+print(111)
+
+label = getMINIST.load_train_labels()[0:10000]
 print(inputdata.shape)
 print(label.shape)
-a = _NN([784, 512, 512, 128, 10], inputdata, label=label, activate="sigmoid", learningRate=0.001)
-a.train(1000)
+a = _NN([784, 100, 50, 30, 20, 10], inputdata, label=label, activate="sigmoid", learningRate=0.001)
+s = time()
+a.train(epoch=10000, batchSize=100)
+print("spend ", time() - s, 's.')
 
 
 

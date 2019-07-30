@@ -14,11 +14,11 @@ def splitData(path = None, data = None, num = 10):
     if path != None:
         data = IO.readData(path)
         # Feed the np.array data.
-        print("Spliting...")
+        # print("Spliting...")
         data = np.array(data)
     retdata = []
     sumLen = data.shape[0]
-    print("shape is:", data.shape)
+    # print("shape is:", data.shape)
     subLen = int(sumLen/num)
     cnt = 0
     for i in range(num):
