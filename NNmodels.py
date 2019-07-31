@@ -15,6 +15,7 @@ class _NN:
         str :param activate: type of the activate function.
         """
         self.learningRate = learningRate
+        self.outputNum = layer[-1]
         self.layer = self.getLayers(layer)
         self.activate = activate
         self.inputData = input
@@ -110,8 +111,11 @@ class _NN:
         """"""
     def getLoss(self):
         output = self.feedForward()
-        self.lossGrad += output - self.label
-        self.loss += (0.5 * (output - self.label)**2).mean()
+        lossGrad = output - self.label
+        loss = (0.5 * (output - self.label)**2).mean()
+        # self.lossGrad += output - self.label
+        # self.loss += (0.5 * (output - self.label)**2).mean()
+        return loss, lossGrad
     @jit
     def backPropaganda(self):
         """
@@ -135,8 +139,19 @@ class _NN:
     def resetLoss(self):
         self.loss = 0.0
         self.lossGrad = 0.0
-
-    # @jit
+    @jit
+    def getBatchLoss(self, batches_x, batches_y):
+        m = batches_x.shape[0]
+        batchLoss = np.zeros((m), dtype=np.float32)
+        batchLossGrad = np.zeros((m, self.outputNum, 1), dtype=np.float32)
+        # print(batchLossGrad.shape)
+        for k in range(m):
+            self.inputData = batches_x[k]
+            self.label = batches_y[k]
+            # print(self.getLoss())
+            batchLoss[k], batchLossGrad[k] = self.getLoss()
+        return batchLoss, batchLossGrad
+    # @jit(parallel=True, nogil=True)
     def train(self, epoch=1000, batchSize=128):
         """"""
         batchNum = math.ceil(self.inputData.shape[0]/batchSize)
@@ -148,14 +163,17 @@ class _NN:
             print('epoch ', i, 'loss is: ', self.loss)
             # if i % 10 == 0:
                 # print('epoch ', i, 'loss is: ', self.loss)
+            s = time()
             for j in range(batchNum):
+
                 # print('epoch ', i, 'loss is: ', self.loss)
                 self.resetLoss()
-                for k in range(batches_x[j].shape[0]):
-                    self.inputData = batches_x[j][k]
-                    self.label = batches_y[j][k]
-                    self.getLoss()
+                batchLoss, batchLossGrad = self.getBatchLoss(batches_x[j], batches_y[j])
+
+                self.loss = batchLoss.sum()
+                self.lossGrad = batchLossGrad.sum(axis=0)
                 self.backPropaganda()
+            print('once optmination costs: ', time()-s, 's')
 
 
 
@@ -317,8 +335,7 @@ y = np.array([[1],
 #     x.append(np.random.rand(2,1))
 #     y.append(np.random.randint(0, 1, (2, 1)))
 inputdata = ((getMINIST.load_train_images().reshape((60000, 784, -1))) / 255.0)[0:10000]
-print(inputdata[1])
-print(111)
+
 
 label = getMINIST.load_train_labels()[0:10000]
 print(inputdata.shape)
